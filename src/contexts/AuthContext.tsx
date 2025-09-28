@@ -99,7 +99,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: 'user@example.com',
           firstName: 'User',
           lastName: 'User',
-          role: 'admin'
+          role: 'admin' as const,
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
         };
         dispatch({
           type: 'SET_USER',

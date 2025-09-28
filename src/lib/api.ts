@@ -131,7 +131,7 @@ class ApiClient {
     return {
       success: false,
       error: 'Profile endpoint temporarily disabled',
-      data: null
+      data: undefined
     };
   }
 
