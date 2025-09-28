@@ -8,16 +8,15 @@ export default function Home() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
-  // TEMPORARILY DISABLED - Auto redirects causing issues
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     if (isAuthenticated) {
-  //       router.push('/dashboard');
-  //     } else {
-  //       router.push('/login');
-  //     }
-  //   }
-  // }, [isAuthenticated, isLoading, router]);
+  useEffect(() => {
+    if (!isLoading) {
+      if (isAuthenticated) {
+        router.push('/dashboard');
+      } else {
+        router.push('/login');
+      }
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   if (isLoading) {
     return (
