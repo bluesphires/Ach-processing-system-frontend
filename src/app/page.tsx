@@ -13,6 +13,7 @@ export default function Home() {
       if (isAuthenticated) {
         router.push('/dashboard');
       } else {
+        // Always redirect to login if not authenticated
         router.push('/login');
       }
     }
