@@ -180,25 +180,25 @@ export default function DashboardPage() {
               <h3 className="text-lg font-medium leading-6 text-gray-900">Quick Actions</h3>
               <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <button
-                  onClick={() => console.log('Navigate to new transaction')}
+                  onClick={() => router.push('/dashboard/transactions/new')}
                   className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   New Transaction
                 </button>
                 <button
-                  onClick={() => console.log('Navigate to NACHA files')}
+                  onClick={() => router.push('/dashboard/nacha')}
                   className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Generate NACHA
                 </button>
                 <button
-                  onClick={() => console.log('Navigate to reports')}
+                  onClick={() => router.push('/dashboard/reports')}
                   className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   View Reports
                 </button>
                 <button
-                  onClick={() => console.log('Navigate to transactions')}
+                  onClick={() => router.push('/dashboard/transactions')}
                   className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   View All Transactions
