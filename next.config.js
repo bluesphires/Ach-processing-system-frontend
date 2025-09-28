@@ -16,14 +16,15 @@ const nextConfig = {
   //     },
   //   ];
   // },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'https://ach-processing-system-production.up.railway.app'}/api/:path*`,
-      },
-    ];
-  },
+  // API routes are now handled by Next.js API routes instead of rewrites
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: `${process.env.NEXT_PUBLIC_API_URL || 'https://ach-processing-system-production.up.railway.app'}/api/:path*`,
+  //     },
+  //   ];
+  // },
 };
 
 module.exports = nextConfig;
