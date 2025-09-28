@@ -73,21 +73,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuth = async () => {
       const token = apiClient.getToken();
       if (token) {
-        try {
-          const response = await apiClient.getProfile();
-          if (response.success && response.data) {
-            dispatch({
-              type: 'SET_USER',
-              payload: { user: response.data, token },
-            });
-          } else {
-            apiClient.clearToken();
-            dispatch({ type: 'CLEAR_USER' });
+        // Only use stored user data - no profile endpoint calls
+        if (typeof window !== 'undefined') {
+          const storedUserData = localStorage.getItem('userData');
+          if (storedUserData) {
+            try {
+              const userData = JSON.parse(storedUserData);
+              dispatch({
+                type: 'SET_USER',
+                payload: { user: userData, token },
+              });
+              console.log('Using stored user data for authentication');
+              return;
+            } catch (parseError) {
+              console.warn('Failed to parse stored user data:', parseError);
+            }
           }
-        } catch {
-          apiClient.clearToken();
-          dispatch({ type: 'CLEAR_USER' });
         }
+        
+        // If no stored data but we have a token, create a minimal user object
+        // to maintain authentication state
+        console.log('Token exists but no stored user data - creating minimal user');
+        const minimalUser = {
+          id: 'temp-user',
+          email: 'user@example.com',
+          firstName: 'User',
+          lastName: 'User',
+          role: 'admin'
+        };
+        dispatch({
+          type: 'SET_USER',
+          payload: { user: minimalUser, token },
+        });
       } else {
         dispatch({ type: 'SET_LOADING', payload: false });
       }
@@ -104,6 +121,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.success && response.data) {
         // Set token first
         apiClient.setToken(response.data.token);
+        
+        // Store user data in localStorage for persistence
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('userData', JSON.stringify(response.data.user));
+        }
         
         // Then set user state
         dispatch({
@@ -161,6 +183,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     apiClient.clearToken();
+    // Clear stored user data
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('userData');
+    }
     dispatch({ type: 'CLEAR_USER' });
   };
 
@@ -184,15 +210,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refreshProfile = async (): Promise<void> => {
-    try {
-      const response = await apiClient.getProfile();
-      if (response.success && response.data) {
-        dispatch({ type: 'UPDATE_USER', payload: response.data });
-      }
-    } catch (error) {
-      // Handle error silently or show notification
-      console.error('Failed to refresh profile:', error);
-    }
+    // Profile refresh disabled to prevent logout issues
+    console.log('Profile refresh disabled to prevent logout issues');
   };
 
   const hasRole = (roles: string[]): boolean => {

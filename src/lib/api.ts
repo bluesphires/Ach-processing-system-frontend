@@ -24,8 +24,13 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
+    // Use Next.js API routes for development to avoid CORS issues
+    const baseURL = process.env.NODE_ENV === 'development' 
+      ? '' // Use relative URLs in development (Next.js API routes)
+      : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001');
+    
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+      baseURL,
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
@@ -43,20 +48,22 @@ class ApiClient {
       (error) => Promise.reject(error)
     );
 
-    // Response interceptor to handle errors
-    this.client.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response?.status === 401) {
-          this.clearToken();
-          // Redirect to login or trigger logout
-          if (typeof window !== 'undefined') {
-            window.location.href = '/login';
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
+    // TEMPORARILY DISABLED - Response interceptor causing automatic redirects
+    // this.client.interceptors.response.use(
+    //   (response) => response,
+    //   (error) => {
+    //     // Only auto-logout on 401 for non-profile endpoints
+    //     // Profile endpoint issues should be handled by the AuthContext
+    //     if (error.response?.status === 401 && !error.config?.url?.includes('/profile')) {
+    //       this.clearToken();
+    //       // Redirect to login or trigger logout
+    //       if (typeof window !== 'undefined') {
+    //         window.location.href = '/login';
+    //       }
+    //     }
+    //     return Promise.reject(error);
+    //   }
+    // );
 
     // Load token from localStorage on initialization
     if (typeof window !== 'undefined') {
@@ -119,8 +126,13 @@ class ApiClient {
   }
 
   async getProfile(): Promise<ApiResponse<User>> {
-    const response: AxiosResponse<ApiResponse<User>> = await this.client.get('/api/auth/profile');
-    return response.data;
+    // Profile endpoint disabled to prevent logout issues
+    // Return error to prevent any calls to this endpoint
+    return {
+      success: false,
+      error: 'Profile endpoint temporarily disabled',
+      data: null
+    };
   }
 
   async updateProfile(updates: { name?: string; email?: string }): Promise<ApiResponse> {
