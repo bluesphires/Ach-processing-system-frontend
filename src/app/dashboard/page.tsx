@@ -254,7 +254,6 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-      {/* </DataPrefetcher> */}
-    </DashboardLayout>
+      </DashboardLayout>
   );
 }

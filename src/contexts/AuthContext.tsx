@@ -91,23 +91,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
         
-        // If no stored data but we have a token, create a minimal user object
-        // to maintain authentication state
-        console.log('Token exists but no stored user data - creating minimal user');
-        const minimalUser = {
-          id: 'temp-user',
-          email: 'user@example.com',
-          firstName: 'User',
-          lastName: 'User',
-          role: 'admin' as const,
-          isActive: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
-        dispatch({
-          type: 'SET_USER',
-          payload: { user: minimalUser, token },
-        });
+        // If no stored data but we have a token, clear the token and logout
+        // This prevents unauthorized access with invalid tokens
+        console.log('Token exists but no stored user data - clearing invalid token');
+        apiClient.clearToken();
+        dispatch({ type: 'CLEAR_USER' });
       } else {
         dispatch({ type: 'SET_LOADING', payload: false });
       }
