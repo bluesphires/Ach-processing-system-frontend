@@ -20,7 +20,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_URL || 'https://ach-processing-system-production.up.railway.app'}/api/:path*`,
       },
     ];
   },

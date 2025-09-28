@@ -24,10 +24,9 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
-    // Use Next.js API routes for development to avoid CORS issues
-    const baseURL = process.env.NODE_ENV === 'development' 
-      ? '' // Use relative URLs in development (Next.js API routes)
-      : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001');
+    // Use Next.js API routes for both development and production to avoid CORS issues
+    // The Next.js rewrites will proxy requests to the actual backend
+    const baseURL = '';
     
     this.client = axios.create({
       baseURL,
