@@ -1,8 +1,8 @@
 'use client';
 
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 // TEMPORARILY DISABLED - DataPrefetcher causing 401 API calls
 // import { DataPrefetcher, BackgroundRefresh } from '@/components/DataOptimization';
@@ -27,10 +27,8 @@ interface StatCard {
 }
 
 export default function DashboardPage() {
-  const { user } = useAuth();
-  // TEMPORARILY DISABLED - Authentication checks causing redirects
-  // const { isAuthenticated, isLoading } = useAuth();
-  // const router = useRouter();
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
   
   // TEMPORARILY DISABLED - API calls causing 401 redirects
   // const { data: transactionStats, isLoading: statsLoading, error: statsError } = useTransactionStats();
@@ -50,30 +48,28 @@ export default function DashboardPage() {
   const nachaFiles: any[] = [];
   const filesLoading = false;
 
-  // TEMPORARILY DISABLED - Authentication checks causing redirects
-  // useEffect(() => {
-  //   // Debug authentication state
-  //   console.log('Dashboard auth check:', { isAuthenticated, isLoading, user });
-  //   
-  //   // Only redirect if we're sure the user is not authenticated
-  //   // Wait for loading to complete before checking authentication
-  //   if (!isLoading && !isAuthenticated) {
-  //     console.log('Redirecting to login - not authenticated');
-  //     router.push('/login');
-  //   }
-  // }, [isAuthenticated, isLoading, router, user]);
+  useEffect(() => {
+    // Debug authentication state
+    console.log('Dashboard auth check:', { isAuthenticated, isLoading, user });
+    
+    // Only redirect if we're sure the user is not authenticated
+    // Wait for loading to complete before checking authentication
+    if (!isLoading && !isAuthenticated) {
+      console.log('Redirecting to login - not authenticated');
+      router.push('/login');
+    }
+  }, [isAuthenticated, isLoading, router, user]);
 
-  // TEMPORARILY DISABLED - Loading check causing issues
-  // if (isLoading || !isAuthenticated) {
-  //   return (
-  //     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-  //       <div className="text-center">
-  //         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600 mx-auto"></div>
-  //         <p className="mt-4 text-lg text-gray-600">Loading dashboard...</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-lg text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
